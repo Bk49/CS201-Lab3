@@ -73,21 +73,21 @@ public class Q1Test {
         Integer[] sortedTrav = Arrays.stream(traversals.get(0)).sorted().toArray(Integer[]::new);
 
         if (Arrays.equals(traversals.get(0), sortedTrav)) {
-            if (isValidBSTFromTraversals(traversals.get(1), traversals.get(0), traversals.get(2))){
+            if (isValidBSTFromTraversals(traversals.get(1), traversals.get(0), traversals.get(2))) {
                 return "Traversal 1 - Inorder, Traversal 2 - Preorder, Traversal 3 - Postorder";
-            }else if(isValidBSTFromTraversals(traversals.get(2), traversals.get(0), traversals.get(1))){
+            } else if (isValidBSTFromTraversals(traversals.get(2), traversals.get(0), traversals.get(1))) {
                 return "Traversal 1 - Inorder, Traversal 2 - Postorder, Traversal 3 - Preorder";
             }
-        }else if(Arrays.equals(traversals.get(1), sortedTrav)){
-            if (isValidBSTFromTraversals(traversals.get(0), traversals.get(1), traversals.get(2))){
+        } else if (Arrays.equals(traversals.get(1), sortedTrav)) {
+            if (isValidBSTFromTraversals(traversals.get(0), traversals.get(1), traversals.get(2))) {
                 return "Traversal 1 - Preorder, Traversal 2 - Inorder, Traversal 3 - Postorder";
-            }else if(isValidBSTFromTraversals(traversals.get(2), traversals.get(1), traversals.get(0))){
+            } else if (isValidBSTFromTraversals(traversals.get(2), traversals.get(1), traversals.get(0))) {
                 return "Traversal 1 - Postorder, Traversal 2 - Inorder, Traversal 3 - Preorder";
             }
-        }else if(Arrays.equals(traversals.get(2), sortedTrav)){
-            if (isValidBSTFromTraversals(traversals.get(0), traversals.get(2), traversals.get(1))){
+        } else if (Arrays.equals(traversals.get(2), sortedTrav)) {
+            if (isValidBSTFromTraversals(traversals.get(0), traversals.get(2), traversals.get(1))) {
                 return "Traversal 1 - Preorder, Traversal 2 - Postorder, Traversal 3 - Inorder";
-            }else if(isValidBSTFromTraversals(traversals.get(1), traversals.get(2), traversals.get(0))){
+            } else if (isValidBSTFromTraversals(traversals.get(1), traversals.get(2), traversals.get(0))) {
                 return "Traversal 1 - Postorder, Traversal 2 - Preorder, Traversal 3 - Inorder";
             }
         }
@@ -120,7 +120,7 @@ public class Q1Test {
 
         Integer root = preorder[0];
 
-        if (!isValidRoot(root, inorder)) {
+        if (!isValidRoot(root, inorder) || !Objects.equals(preorder[0], postorder[postorder.length - 1])) {
             return false;
         }
 
