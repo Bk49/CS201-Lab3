@@ -73,21 +73,21 @@ public class Q1Test {
         Integer[] sortedTrav = Arrays.stream(traversals.get(0)).sorted().toArray(Integer[]::new);
 
         if (Arrays.equals(traversals.get(0), sortedTrav)) {
-            if (areTraversalsSame(traversals.get(1), traversals.get(0), traversals.get(2))){
+            if (isValidBSTFromTraversals(traversals.get(1), traversals.get(0), traversals.get(2))) {
                 return "Traversal 1 - Inorder, Traversal 2 - Preorder, Traversal 3 - Postorder";
-            }else if(areTraversalsSame(traversals.get(2), traversals.get(0), traversals.get(1))){
+            } else if (isValidBSTFromTraversals(traversals.get(2), traversals.get(0), traversals.get(1))) {
                 return "Traversal 1 - Inorder, Traversal 2 - Postorder, Traversal 3 - Preorder";
             }
-        }else if(Arrays.equals(traversals.get(1), sortedTrav)){
-            if (areTraversalsSame(traversals.get(0), traversals.get(1), traversals.get(2))){
+        } else if (Arrays.equals(traversals.get(1), sortedTrav)) {
+            if (isValidBSTFromTraversals(traversals.get(0), traversals.get(1), traversals.get(2))) {
                 return "Traversal 1 - Preorder, Traversal 2 - Inorder, Traversal 3 - Postorder";
-            }else if(areTraversalsSame(traversals.get(2), traversals.get(1), traversals.get(0))){
+            } else if (isValidBSTFromTraversals(traversals.get(2), traversals.get(1), traversals.get(0))) {
                 return "Traversal 1 - Postorder, Traversal 2 - Inorder, Traversal 3 - Preorder";
             }
-        }else if(Arrays.equals(traversals.get(2), sortedTrav)){
-            if (areTraversalsSame(traversals.get(0), traversals.get(2), traversals.get(1))){
+        } else if (Arrays.equals(traversals.get(2), sortedTrav)) {
+            if (isValidBSTFromTraversals(traversals.get(0), traversals.get(2), traversals.get(1))) {
                 return "Traversal 1 - Preorder, Traversal 2 - Postorder, Traversal 3 - Inorder";
-            }else if(areTraversalsSame(traversals.get(1), traversals.get(2), traversals.get(0))){
+            } else if (isValidBSTFromTraversals(traversals.get(1), traversals.get(2), traversals.get(0))) {
                 return "Traversal 1 - Postorder, Traversal 2 - Preorder, Traversal 3 - Inorder";
             }
         }
@@ -109,7 +109,7 @@ public class Q1Test {
                 Arrays.equals(sortedTraversals.get(1), sortedTraversals.get(2)) ? traversals : null;
     }
 
-    public static boolean areTraversalsSame(Integer[] preorder, Integer[] inorder, Integer[] postorder) {
+    public static boolean isValidBSTFromTraversals(Integer[] preorder, Integer[] inorder, Integer[] postorder) {
         if (preorder.length != inorder.length || inorder.length != postorder.length) {
             return false;
         }
@@ -118,11 +118,15 @@ public class Q1Test {
             return true;
         }
 
-        int root = preorder[0];
+        Integer root = preorder[0];
+
+        if (!isValidRoot(root, inorder) || !Objects.equals(preorder[0], postorder[postorder.length - 1])) {
+            return false;
+        }
 
         int rootIndexInInorder = -1;
         for (int i = 0; i < inorder.length; i++) {
-            if (inorder[i] == root) {
+            if (inorder[i].equals(root)) {
                 rootIndexInInorder = i;
                 break;
             }
@@ -141,8 +145,16 @@ public class Q1Test {
         Integer[] leftPostorder = Arrays.copyOfRange(postorder, 0, rootIndexInInorder);
         Integer[] rightPostorder = Arrays.copyOfRange(postorder, rootIndexInInorder, postorder.length - 1);
 
-        return areTraversalsSame(leftPreorder, leftInorder, leftPostorder) &&
-                areTraversalsSame(rightPreorder, rightInorder, rightPostorder);
+        return isValidBSTFromTraversals(leftPreorder, leftInorder, leftPostorder) &&
+                isValidBSTFromTraversals(rightPreorder, rightInorder, rightPostorder);
     }
 
+    public static boolean isValidRoot(Integer root, Integer[] inorder) {
+        for (int i = 0; i < inorder.length - 1; i++) {
+            if (inorder[i].equals(root) && inorder[i + 1] < root) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
