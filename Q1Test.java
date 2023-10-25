@@ -72,6 +72,25 @@ public class Q1Test {
 
         Integer[] sortedTrav = Arrays.stream(traversals.get(0)).sorted().toArray(Integer[]::new);
 
+        if (Arrays.equals(traversals.get(0), sortedTrav)) {
+            if (areTraversalsSame(traversals.get(1), traversals.get(0), traversals.get(2))){
+                return "Traversal 1 - Inorder, Traversal 2 - Preorder, Traversal 3 - Postorder";
+            }else if(areTraversalsSame(traversals.get(2), traversals.get(0), traversals.get(1))){
+                return "Traversal 1 - Inorder, Traversal 2 - Postorder, Traversal 3 - Preorder";
+            }
+        }else if(Arrays.equals(traversals.get(1), sortedTrav)){
+            if (areTraversalsSame(traversals.get(0), traversals.get(1), traversals.get(2))){
+                return "Traversal 1 - Preorder, Traversal 2 - Inorder, Traversal 3 - Postorder";
+            }else if(areTraversalsSame(traversals.get(2), traversals.get(1), traversals.get(0))){
+                return "Traversal 1 - Postorder, Traversal 2 - Inorder, Traversal 3 - Preorder";
+            }
+        }else if(Arrays.equals(traversals.get(2), sortedTrav)){
+            if (areTraversalsSame(traversals.get(0), traversals.get(2), traversals.get(1))){
+                return "Traversal 1 - Preorder, Traversal 2 - Postorder, Traversal 3 - Inorder";
+            }else if(areTraversalsSame(traversals.get(1), traversals.get(2), traversals.get(0))){
+                return "Traversal 1 - Postorder, Traversal 2 - Preorder, Traversal 3 - Inorder";
+            }
+        }
 
         return "Invalid traversals";
     }
@@ -90,5 +109,40 @@ public class Q1Test {
                 Arrays.equals(sortedTraversals.get(1), sortedTraversals.get(2)) ? traversals : null;
     }
 
+    public static boolean areTraversalsSame(Integer[] preorder, Integer[] inorder, Integer[] postorder) {
+        if (preorder.length != inorder.length || inorder.length != postorder.length) {
+            return false;
+        }
+
+        if (preorder.length == 0) {
+            return true;
+        }
+
+        int root = preorder[0];
+
+        int rootIndexInInorder = -1;
+        for (int i = 0; i < inorder.length; i++) {
+            if (inorder[i] == root) {
+                rootIndexInInorder = i;
+                break;
+            }
+        }
+
+        if (rootIndexInInorder == -1) {
+            return false;
+        }
+
+        Integer[] leftInorder = Arrays.copyOfRange(inorder, 0, rootIndexInInorder);
+        Integer[] rightInorder = Arrays.copyOfRange(inorder, rootIndexInInorder + 1, inorder.length);
+
+        Integer[] leftPreorder = Arrays.copyOfRange(preorder, 1, rootIndexInInorder + 1);
+        Integer[] rightPreorder = Arrays.copyOfRange(preorder, rootIndexInInorder + 1, preorder.length);
+
+        Integer[] leftPostorder = Arrays.copyOfRange(postorder, 0, rootIndexInInorder);
+        Integer[] rightPostorder = Arrays.copyOfRange(postorder, rootIndexInInorder, postorder.length - 1);
+
+        return areTraversalsSame(leftPreorder, leftInorder, leftPostorder) &&
+                areTraversalsSame(rightPreorder, rightInorder, rightPostorder);
+    }
 
 }
